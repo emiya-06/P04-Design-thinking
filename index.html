@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LPU Lost & Found | Campus Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lpu: {
+              blue: '#003366',
+              orange: '#FF6B00',
+              light: '#E8F1FF',
+              dark: '#0A1628'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    * { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0A1628 0%, #0F2744 50%, #0A1628 100%);
+      min-height: 100vh;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    
+    .glass-strong {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 107, 0, 0.4);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #FF6B00, #FF8C00);
+      transition: all 0.25s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(255, 107, 0, 0.5);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.25s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+    
+    .input-field {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s ease;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #FF6B00;
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .toast {
+      animation: slideIn 0.35s ease, fadeOut 0.4s ease 2.6s forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .status-open { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+    .status-claimed { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+    .status-returned { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    
+    .chat-bubble-me {
+      background: linear-gradient(135deg, #FF6B00, #FF8C00);
+      border-radius: 18px 18px 4px 18px;
+    }
+    .chat-bubble-them {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 18px 18px 18px 4px;
+    }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    
+    .preview-img {
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    
+    .nav-active {
+      color: #FF6B00 !important;
+      border-bottom: 2px solid #FF6B00;
+    }
+  </style>
+</head>
+<body class="text-white antialiased">
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-[100] space-y-3"></div>
+
+  <!-- ========== AUTH SCREEN ========== -->
+  <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md fade-in">
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl mb-4">
+          <i class="fas fa-search-location text-3xl text-white"></i>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight">LPU Lost & Found</h1>
+        <p class="text-white/60 mt-2 text-sm">Find it. Return it. Trust the campus.</p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="glass-strong rounded-2xl p-8 shadow-2xl">
+        <!-- Tabs -->
+        <div class="flex mb-6 bg-white/5 rounded-xl p-1">
+          <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white">Login</button>
+          <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Username</label>
+            <input type="text" id="login-username" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="your_username" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Password</label>
+            <input type="password" id="login-password" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="••••••••" />
+          </div>
+          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-white mt-2">
+            <i class="fas fa-sign-in-alt mr-2"></i>Login
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Full Name</label>
+            <input type="text" id="reg-name" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="Your full name" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Username <span class="text-orange-400 text-xs">(must be unique)</span></label>
+            <input type="text" id="reg-username" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="choose_unique_username" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Password</label>
+            <input type="password" id="reg-password" required minlength="4" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="min 4 characters" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-white/80 mb-1.5">Contact (Phone / Email)</label>
+            <input type="text" id="reg-contact" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="for verification & contact" />
+          </div>
+          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-white mt-2">
+            <i class="fas fa-user-plus mr-2"></i>Create Account
+          </button>
+        </form>
+      </div>
+
+      <p class="text-center text-white/40 text-xs mt-6">Prototype for INT335 · Design Thinking · P04</p>
+    </div>
+  </div>
+
+  <!-- ========== MAIN APP ========== -->
+  <div id="app-screen" class="hidden min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="glass sticky top-0 z-50 border-b border-white/10">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+            <i class="fas fa-search-location text-white"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg leading-tight">LPU Lost & Found</h1>
+            <p class="text-xs text-white/50">Campus Connect</p>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center gap-1">
+          <button onclick="showSection('feed')" id="nav-feed" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Feed</button>
+          <button onclick="showSection('post-lost')" id="nav-post-lost" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Post Lost</button>
+          <button onclick="showSection('post-found')" id="nav-post-found" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Post Found</button>
+          <button onclick="showSection('messages')" id="nav-messages" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition relative">
+            Messages
+            <span id="msg-badge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full text-xs flex items-center justify-center font-bold">0</span>
+          </button>
+          <button onclick="showSection('my-posts')" id="nav-my-posts" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">My Posts</button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <p class="text-sm font-semibold" id="nav-username">User</p>
+            <p class="text-xs text-white/50" id="nav-fullname">Name</p>
+          </div>
+          <button onclick="handleLogout()" class="btn-secondary px-3 py-2 rounded-lg text-sm" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Nav -->
+      <div class="md:hidden flex overflow-x-auto gap-1 px-4 pb-3 border-t border-white/5 pt-2">
+        <button onclick="showSection('feed')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Feed</button>
+        <button onclick="showSection('post-lost')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Post Lost</button>
+        <button onclick="showSection('post-found')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Post Found</button>
+        <button onclick="showSection('messages')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Messages</button>
+        <button onclick="showSection('my-posts')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">My Posts</button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
+
+      <!-- ===== FEED SECTION ===== -->
+      <section id="section-feed" class="fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold">Campus Lost & Found</h2>
+            <p class="text-white/50 text-sm">Browse recent posts · Help someone recover their belongings</p>
+          </div>
+          <div class="flex gap-2">
+            <select id="filter-type" onchange="renderFeed()" class="input-field px-3 py-2 rounded-lg text-sm">
+              <option value="all">All Posts</option>
+              <option value="lost">Lost Only</option>
+              <option value="found">Found Only</option>
+            </select>
+            <select id="filter-category" onchange="renderFeed()" class="input-field px-3 py-2 rounded-lg text-sm">
+              <option value="all">All Categories</option>
+              <option value="ID Card">ID Card</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Documents">Documents</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Books">Books</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="feed-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Cards injected by JS -->
+        </div>
+        <div id="feed-empty" class="hidden text-center py-16">
+          <i class="fas fa-inbox text-5xl text-white/20 mb-4"></i>
+          <p class="text-white/50">No posts yet. Be the first to post!</p>
+        </div>
+      </section>
+
+      <!-- ===== POST LOST SECTION ===== -->
+      <section id="section-post-lost" class="hidden fade-in">
+        <div class="max-w-2xl mx-auto">
+          <h2 class="text-2xl font-bold mb-1">Report a Lost Item</h2>
+          <p class="text-white/50 text-sm mb-6">Provide as many details as possible so finders can match it.</p>
+
+          <form onsubmit="submitLostItem(event)" class="glass-strong rounded-2xl p-6 space-y-5">
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Item Title *</label>
+              <input type="text" id="lost-title" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="e.g. Black Wallet with LPU ID" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Category *</label>
+                <select id="lost-category" required class="input-field w-full px-4 py-3 rounded-xl">
+                  <option value="">Select category</option>
+                  <option>ID Card</option>
+                  <option>Electronics</option>
+                  <option>Documents</option>
+                  <option>Accessories</option>
+                  <option>Clothing</option>
+                  <option>Books</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Date Lost *</label>
+                <input type="date" id="lost-date" required class="input-field w-full px-4 py-3 rounded-xl" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Approximate Time</label>
+                <input type="time" id="lost-time" class="input-field w-full px-4 py-3 rounded-xl" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Location *</label>
+                <select id="lost-location" required class="input-field w-full px-4 py-3 rounded-xl">
+                  <option value="">Select location</option>
+                  <option>Academic Block 33-34</option>
+                  <option>Academic Block 25-26</option>
+                  <option>Library</option>
+                  <option>Central Mess</option>
+                  <option>Hostel Area (Boys)</option>
+                  <option>Hostel Area (Girls)</option>
+                  <option>Sports Complex</option>
+                  <option>Uni-Hospital</option>
+                  <option>Main Gate / Entrance</option>
+                  <option>Food Court / Canteens</option>
+                  <option>Parking Lot</option>
+                  <option>Other (specify in details)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Detailed Description *</label>
+              <textarea id="lost-desc" required rows="3" class="input-field w-full px-4 py-3 rounded-xl resize-none" placeholder="Color, brand, unique marks, contents, anything that helps identify it..."></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Photo of the Item (optional but recommended)</label>
+              <input type="file" id="lost-image" accept="image/*" class="input-field w-full px-4 py-3 rounded-xl text-sm" onchange="previewImage(this, 'lost-preview')" />
+              <div id="lost-preview" class="mt-3 hidden"></div>
+            </div>
+
+            <div class="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4">
+              <p class="text-sm font-semibold text-orange-300 mb-2"><i class="fas fa-shield-alt mr-2"></i>Ownership Proof (Strongly Recommended)</p>
+              <p class="text-xs text-white/60 mb-3">Upload a photo of the item before losing it, a bill, or any proof. This helps us return it to the correct owner.</p>
+              <input type="file" id="lost-proof" accept="image/*" class="input-field w-full px-4 py-3 rounded-xl text-sm" onchange="previewImage(this, 'lost-proof-preview')" />
+              <div id="lost-proof-preview" class="mt-3 hidden"></div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Contact Preference</label>
+              <input type="text" id="lost-contact" class="input-field w-full px-4 py-3 rounded-xl" placeholder="Phone / WhatsApp (or leave blank to use profile contact)" />
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold">
+              <i class="fas fa-paper-plane mr-2"></i>Post Lost Item
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ===== POST FOUND SECTION ===== -->
+      <section id="section-post-found" class="hidden fade-in">
+        <div class="max-w-2xl mx-auto">
+          <h2 class="text-2xl font-bold mb-1">Report a Found Item</h2>
+          <p class="text-white/50 text-sm mb-6">Thank you for being a good campus citizen. Post what you found so the owner can claim it.</p>
+
+          <form onsubmit="submitFoundItem(event)" class="glass-strong rounded-2xl p-6 space-y-5">
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Item Title *</label>
+              <input type="text" id="found-title" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="e.g. Blue Backpack near Library" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Category *</label>
+                <select id="found-category" required class="input-field w-full px-4 py-3 rounded-xl">
+                  <option value="">Select category</option>
+                  <option>ID Card</option>
+                  <option>Electronics</option>
+                  <option>Documents</option>
+                  <option>Accessories</option>
+                  <option>Clothing</option>
+                  <option>Books</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Date Found *</label>
+                <input type="date" id="found-date" required class="input-field w-full px-4 py-3 rounded-xl" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Approximate Time</label>
+                <input type="time" id="found-time" class="input-field w-full px-4 py-3 rounded-xl" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1.5">Where Found *</label>
+                <select id="found-location" required class="input-field w-full px-4 py-3 rounded-xl">
+                  <option value="">Select location</option>
+                  <option>Academic Block 33-34</option>
+                  <option>Academic Block 25-26</option>
+                  <option>Library</option>
+                  <option>Central Mess</option>
+                  <option>Hostel Area (Boys)</option>
+                  <option>Hostel Area (Girls)</option>
+                  <option>Sports Complex</option>
+                  <option>Uni-Hospital</option>
+                  <option>Main Gate / Entrance</option>
+                  <option>Food Court / Canteens</option>
+                  <option>Parking Lot</option>
+                  <option>Other (specify in details)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Description *</label>
+              <textarea id="found-desc" required rows="3" class="input-field w-full px-4 py-3 rounded-xl resize-none" placeholder="What it looks like, any unique marks, current condition..."></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Photo of Found Item *</label>
+              <input type="file" id="found-image" accept="image/*" required class="input-field w-full px-4 py-3 rounded-xl text-sm" onchange="previewImage(this, 'found-preview')" />
+              <div id="found-preview" class="mt-3 hidden"></div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Current Holding Location</label>
+              <input type="text" id="found-holding" class="input-field w-full px-4 py-3 rounded-xl" placeholder="e.g. With me / Given to Security Desk / Library counter" />
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold">
+              <i class="fas fa-hand-holding-heart mr-2"></i>Post Found Item
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ===== MESSAGES SECTION ===== -->
+      <section id="section-messages" class="hidden fade-in">
+        <h2 class="text-2xl font-bold mb-6">Messages</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 h-[calc(100vh-220px)] min-h-[400px]">
+          <!-- Conversation List -->
+          <div class="glass rounded-2xl overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-white/10">
+              <h3 class="font-semibold">Conversations</h3>
+            </div>
+            <div id="conversation-list" class="flex-1 overflow-y-auto p-2 space-y-1">
+              <!-- Injected -->
+            </div>
+          </div>
+
+          <!-- Chat Area -->
+          <div class="lg:col-span-2 glass rounded-2xl overflow-hidden flex flex-col">
+            <div id="chat-header" class="p-4 border-b border-white/10 flex items-center gap-3">
+              <p class="text-white/50 text-sm">Select a conversation</p>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
+              <!-- Messages -->
+            </div>
+            <div id="chat-input-area" class="p-4 border-t border-white/10 hidden">
+              <form onsubmit="sendMessage(event)" class="flex gap-2">
+                <input type="text" id="chat-input" class="input-field flex-1 px-4 py-3 rounded-xl" placeholder="Type your message..." autocomplete="off" />
+                <button type="submit" class="btn-primary px-5 rounded-xl">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MY POSTS SECTION ===== -->
+      <section id="section-my-posts" class="hidden fade-in">
+        <h2 class="text-2xl font-bold mb-6">My Posts</h2>
+        <div id="my-posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Injected -->
+        </div>
+        <div id="my-posts-empty" class="hidden text-center py-16">
+          <i class="fas fa-folder-open text-5xl text-white/20 mb-4"></i>
+          <p class="text-white/50">You haven't posted anything yet.</p>
+        </div>
+      </section>
+
+      <!-- ===== ITEM DETAIL MODAL ===== -->
+      <div id="item-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="glass-strong rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto fade-in">
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <span id="modal-type-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-2"></span>
+                <h3 id="modal-title" class="text-xl font-bold"></h3>
+              </div>
+              <button onclick="closeModal()" class="text-white/50 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div id="modal-image-container" class="mb-4 rounded-xl overflow-hidden bg-black/30"></div>
+
+            <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+              <div class="bg-white/5 rounded-lg p-3">
+                <p class="text-white/50 text-xs">Category</p>
+                <p id="modal-category" class="font-medium"></p>
+              </div>
+              <div class="bg-white/5 rounded-lg p-3">
+                <p class="text-white/50 text-xs">Location</p>
+                <p id="modal-location" class="font-medium"></p>
+              </div>
+              <div class="bg-white/5 rounded-lg p-3">
+                <p class="text-white/50 text-xs">Date</p>
+                <p id="modal-date" class="font-medium"></p>
+              </div>
+              <div class="bg-white/5 rounded-lg p-3">
+                <p class="text-white/50 text-xs">Status</p>
+                <p id="modal-status" class="font-medium"></p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <p class="text-white/50 text-xs mb-1">Description</p>
+              <p id="modal-desc" class="text-sm leading-relaxed"></p>
+            </div>
+
+            <div id="modal-proof-section" class="mb-4 hidden">
+              <p class="text-white/50 text-xs mb-2">Ownership Proof uploaded by owner</p>
+              <div id="modal-proof-img"></div>
+            </div>
+
+            <div class="flex items-center gap-3 mb-5 text-sm">
+              <div class="w-9 h-9 rounded-full bg-orange-500/30 flex items-center justify-center font-bold" id="modal-poster-initial"></div>
+              <div>
+                <p class="font-medium" id="modal-poster"></p>
+                <p class="text-white/50 text-xs" id="modal-contact"></p>
+              </div>
+            </div>
+
+            <div id="modal-actions" class="flex flex-wrap gap-3">
+              <!-- Dynamic buttons -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CLAIM MODAL ===== -->
+      <div id="claim-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="glass-strong rounded-2xl max-w-md w-full fade-in p-6">
+          <h3 class="text-xl font-bold mb-1">Claim this Item</h3>
+          <p class="text-white/50 text-sm mb-5">To prove ownership, please upload proof (photo of item before loss / bill / unique mark).</p>
+          
+          <form onsubmit="submitClaim(event)" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Your Message to Owner *</label>
+              <textarea id="claim-message" required rows="3" class="input-field w-full px-4 py-3 rounded-xl resize-none" placeholder="Explain why you believe this is yours..."></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1.5">Ownership Proof *</label>
+              <input type="file" id="claim-proof" accept="image/*" required class="input-field w-full px-4 py-3 rounded-xl text-sm" onchange="previewImage(this, 'claim-preview')" />
+              <div id="claim-preview" class="mt-3 hidden"></div>
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button type="button" onclick="closeClaimModal()" class="btn-secondary flex-1 py-3 rounded-xl font-medium">Cancel</button>
+              <button type="submit" class="btn-primary flex-1 py-3 rounded-xl font-bold">Send Claim</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // ===================== STATE & STORAGE =====================
+    // Safe storage: uses localStorage when available, otherwise pure in-memory
+    // (fixes SecurityError in sandboxed / restricted environments)
+    const STORAGE_KEY = 'lpu_lostfound_v1';
+    let memoryStore = null; // fallback when localStorage is blocked
+
+    function canUseLocalStorage() {
+      try {
+        const test = '__lpu_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    const useLS = canUseLocalStorage();
+
+    let state = {
+      users: [],
+      posts: [],
+      messages: [],
+      currentUser: null,
+      activeChat: null, // { withUsername, itemId }
+      currentItemId: null
+    };
+
+    function loadState() {
+      try {
+        if (useLS) {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const data = JSON.parse(raw);
+            state.users = data.users || [];
+            state.posts = data.posts || [];
+            state.messages = data.messages || [];
+          }
+        } else if (memoryStore) {
+          state.users = memoryStore.users || [];
+          state.posts = memoryStore.posts || [];
+          state.messages = memoryStore.messages || [];
+        }
+      } catch (e) {
+        console.warn('Storage load failed, using empty state', e);
+      }
+    }
+
+    function saveState() {
+      const payload = {
+        users: state.users,
+        posts: state.posts,
+        messages: state.messages
+      };
+      try {
+        if (useLS) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        } else {
+          memoryStore = payload;
+        }
+      } catch (e) {
+        // silent fail – keep in-memory
+        memoryStore = payload;
+      }
+    }
+
+    // ===================== UTILS =====================
+    function toast(msg, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `toast glass-strong px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 max-w-sm ${type === 'error' ? 'border-red-500/40' : 'border-green-500/40'}`;
+      el.innerHTML = `
+        <i class="fas ${type === 'error' ? 'fa-exclamation-circle text-red-400' : 'fa-check-circle text-green-400'}"></i>
+        <span class="text-sm font-medium">${msg}</span>
+      `;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 3000);
+    }
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+
+    function formatDate(d) {
+      if (!d) return '—';
+      const date = new Date(d);
+      return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function timeAgo(ts) {
+      const diff = (Date.now() - ts) / 1000;
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      return Math.floor(diff / 86400) + 'd ago';
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function previewImage(input, previewId) {
+      const preview = document.getElementById(previewId);
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.innerHTML = `<img src="${e.target.result}" class="preview-img w-full max-w-xs" />`;
+          preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // ===================== AUTH =====================
+    function switchAuthTab(tab) {
+      document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('register-form').classList.toggle('hidden', tab !== 'register');
+      document.getElementById('tab-login').className = tab === 'login'
+        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white'
+        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white';
+      document.getElementById('tab-register').className = tab === 'register'
+        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white'
+        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white';
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const username = document.getElementById('reg-username').value.trim().toLowerCase();
+      const password = document.getElementById('reg-password').value;
+      const contact = document.getElementById('reg-contact').value.trim();
+
+      if (state.users.find(u => u.username === username)) {
+        toast('Username already taken. Choose another.', 'error');
+        return;
+      }
+
+      const user = { id: uid(), name, username, password, contact, createdAt: Date.now() };
+      state.users.push(user);
+      saveState();
+      toast('Account created! Please login.');
+      switchAuthTab('login');
+      document.getElementById('login-username').value = username;
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      const user = state.users.find(u => u.username === username && u.password === password);
+      if (!user) {
+        toast('Invalid username or password', 'error');
+        return;
+      }
+
+      state.currentUser = user;
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('app-screen').classList.remove('hidden');
+      document.getElementById('nav-username').textContent = '@' + user.username;
+      document.getElementById('nav-fullname').textContent = user.name;
+      showSection('feed');
+      updateMsgBadge();
+      toast(`Welcome back, ${user.name}!`);
+    }
+
+    function handleLogout() {
+      state.currentUser = null;
+      state.activeChat = null;
+      document.getElementById('app-screen').classList.add('hidden');
+      document.getElementById('auth-screen').classList.remove('hidden');
+      document.getElementById('login-password').value = '';
+      toast('Logged out');
+    }
+
+    // ===================== NAVIGATION =====================
+    function showSection(name) {
+      ['feed', 'post-lost', 'post-found', 'messages', 'my-posts'].forEach(s => {
+        document.getElementById('section-' + s).classList.add('hidden');
+        const btn = document.getElementById('nav-' + s);
+        if (btn) btn.classList.remove('nav-active', 'text-orange-400');
+      });
+      document.getElementById('section-' + name).classList.remove('hidden');
+      const activeBtn = document.getElementById('nav-' + name);
+      if (activeBtn) activeBtn.classList.add('nav-active');
+
+      if (name === 'feed') renderFeed();
+      if (name === 'my-posts') renderMyPosts();
+      if (name === 'messages') renderConversations();
+    }
+
+    // ===================== FEED & POSTS =====================
+    function renderFeed() {
+      const typeFilter = document.getElementById('filter-type').value;
+      const catFilter = document.getElementById('filter-category').value;
+      let posts = [...state.posts].sort((a, b) => b.createdAt - a.createdAt);
+
+      if (typeFilter !== 'all') posts = posts.filter(p => p.type === typeFilter);
+      if (catFilter !== 'all') posts = posts.filter(p => p.category === catFilter);
+
+      const container = document.getElementById('feed-container');
+      const empty = document.getElementById('feed-empty');
+
+      if (posts.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      container.innerHTML = posts.map(p => `
+        <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer" onclick="openItemModal('${p.id}')">
+          ${p.image ? `<img src="${p.image}" class="w-full h-44 object-cover" />` : `
+            <div class="w-full h-44 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">
+              <i class="fas fa-image text-4xl text-white/20"></i>
+            </div>
+          `}
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">
+                ${p.type === 'lost' ? 'LOST' : 'FOUND'}
+              </span>
+              <span class="status-${p.status} px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">${p.status}</span>
+            </div>
+            <h3 class="font-semibold text-lg leading-tight mb-1 line-clamp-1">${p.title}</h3>
+            <p class="text-white/50 text-sm mb-3 line-clamp-2">${p.description}</p>
+            <div class="flex items-center justify-between text-xs text-white/40">
+              <span><i class="fas fa-map-marker-alt mr-1"></i>${p.location}</span>
+              <span>${timeAgo(p.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMyPosts() {
+      const posts = state.posts.filter(p => p.userId === state.currentUser.id).sort((a, b) => b.createdAt - a.createdAt);
+      const container = document.getElementById('my-posts-container');
+      const empty = document.getElementById('my-posts-empty');
+
+      if (posts.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      container.innerHTML = posts.map(p => `
+        <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer" onclick="openItemModal('${p.id}')">
+          ${p.image ? `<img src="${p.image}" class="w-full h-40 object-cover" />` : `
+            <div class="w-full h-40 bg-white/5 flex items-center justify-center"><i class="fas fa-image text-3xl text-white/20"></i></div>
+          `}
+          <div class="p-4">
+            <div class="flex justify-between mb-2">
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">${p.type.toUpperCase()}</span>
+              <span class="status-${p.status} px-2 py-0.5 rounded-full text-xs capitalize">${p.status}</span>
+            </div>
+            <h3 class="font-semibold mb-1">${p.title}</h3>
+            <p class="text-xs text-white/40">${formatDate(p.date)} · ${p.location}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function submitLostItem(e) {
+      e.preventDefault();
+      const imageFile = document.getElementById('lost-image').files[0];
+      const proofFile = document.getElementById('lost-proof').files[0];
+      const image = await fileToBase64(imageFile);
+      const proof = await fileToBase64(proofFile);
+
+      const post = {
+        id: uid(),
+        type: 'lost',
+        title: document.getElementById('lost-title').value.trim(),
+        category: document.getElementById('lost-category').value,
+        date: document.getElementById('lost-date').value,
+        time: document.getElementById('lost-time').value,
+        location: document.getElementById('lost-location').value,
+        description: document.getElementById('lost-desc').value.trim(),
+        contact: document.getElementById('lost-contact').value.trim() || state.currentUser.contact,
+        image,
+        proof,
+        status: 'open',
+        userId: state.currentUser.id,
+        username: state.currentUser.username,
+        name: state.currentUser.name,
+        createdAt: Date.now(),
+        claims: []
+      };
+
+      state.posts.unshift(post);
+      saveState();
+      toast('Lost item posted successfully!');
+      e.target.reset();
+      document.getElementById('lost-preview').classList.add('hidden');
+      document.getElementById('lost-proof-preview').classList.add('hidden');
+      showSection('feed');
+    }
+
+    async function submitFoundItem(e) {
+      e.preventDefault();
+      const imageFile = document.getElementById('found-image').files[0];
+      const image = await fileToBase64(imageFile);
+
+      const post = {
+        id: uid(),
+        type: 'found',
+        title: document.getElementById('found-title').value.trim(),
+        category: document.getElementById('found-category').value,
+        date: document.getElementById('found-date').value,
+        time: document.getElementById('found-time').value,
+        location: document.getElementById('found-location').value,
+        description: document.getElementById('found-desc').value.trim(),
+        holding: document.getElementById('found-holding').value.trim(),
+        contact: state.currentUser.contact,
+        image,
+        status: 'open',
+        userId: state.currentUser.id,
+        username: state.currentUser.username,
+        name: state.currentUser.name,
+        createdAt: Date.now(),
+        claims: []
+      };
+
+      state.posts.unshift(post);
+      saveState();
+      toast('Found item posted. Thank you!');
+      e.target.reset();
+      document.getElementById('found-preview').classList.add('hidden');
+      showSection('feed');
+    }
+
+    // ===================== ITEM MODAL =====================
+    function openItemModal(id) {
+      const p = state.posts.find(x => x.id === id);
+      if (!p) return;
+      state.currentItemId = id;
+
+      document.getElementById('modal-type-badge').textContent = p.type === 'lost' ? 'LOST ITEM' : 'FOUND ITEM';
+      document.getElementById('modal-type-badge').className = `inline-block px-3 py-1 rounded-full text-xs font-bold mb-2 ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`;
+      document.getElementById('modal-title').textContent = p.title;
+      document.getElementById('modal-category').textContent = p.category;
+      document.getElementById('modal-location').textContent = p.location;
+      document.getElementById('modal-date').textContent = formatDate(p.date) + (p.time ? ' · ' + p.time : '');
+      document.getElementById('modal-status').textContent = p.status.charAt(0).toUpperCase() + p.status.slice(1);
+      document.getElementById('modal-desc').textContent = p.description;
+      document.getElementById('modal-poster').textContent = p.name + ' (@' + p.username + ')';
+      document.getElementById('modal-contact').textContent = p.contact || 'Contact via messages';
+      document.getElementById('modal-poster-initial').textContent = p.name.charAt(0).toUpperCase();
+
+      const imgC = document.getElementById('modal-image-container');
+      imgC.innerHTML = p.image ? `<img src="${p.image}" class="w-full max-h-72 object-contain" />` : '<div class="h-32 flex items-center justify-center text-white/30"><i class="fas fa-image text-4xl"></i></div>';
+
+      const proofSec = document.getElementById('modal-proof-section');
+      if (p.proof) {
+        proofSec.classList.remove('hidden');
+        document.getElementById('modal-proof-img').innerHTML = `<img src="${p.proof}" class="preview-img max-w-xs" />`;
+      } else {
+        proofSec.classList.add('hidden');
+      }
+
+      // Actions
+      const actions = document.getElementById('modal-actions');
+      actions.innerHTML = '';
+
+      if (p.userId === state.currentUser.id) {
+        // Owner view
+        if (p.status === 'open') {
+          actions.innerHTML = `
+            <button onclick="markReturned('${p.id}')" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
+              <i class="fas fa-check-double mr-2"></i>Mark as Returned
+            </button>
+          `;
+        }
+        // Show claims if any
+        if (p.claims && p.claims.length > 0) {
+          actions.innerHTML += `<p class="w-full text-sm text-white/60 mt-2">Claims received: ${p.claims.length} (check Messages)</p>`;
+        }
+      } else {
+        // Other user
+        if (p.status === 'open') {
+          actions.innerHTML = `
+            <button onclick="openClaimModal()" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">
+              <i class="fas fa-hand-holding mr-2"></i>${p.type === 'lost' ? 'I Found This' : 'This is Mine'}
+            </button>
+            <button onclick="startChat('${p.username}', '${p.id}')" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-semibold">
+              <i class="fas fa-comment mr-2"></i>Message Owner
+            </button>
+          `;
+        } else {
+          actions.innerHTML = `<p class="text-white/50 text-sm">This item is already ${p.status}.</p>`;
+        }
+      }
+
+      document.getElementById('item-modal').classList.remove('hidden');
+      document.getElementById('item-modal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('item-modal').classList.add('hidden');
+      document.getElementById('item-modal').classList.remove('flex');
+    }
+
+    function markReturned(id) {
+      const p = state.posts.find(x => x.id === id);
+      if (p) {
+        p.status = 'returned';
+        saveState();
+        toast('Marked as returned. Great job!');
+        closeModal();
+        renderFeed();
+        renderMyPosts();
+      }
+    }
+
+    // ===================== CLAIM =====================
+    function openClaimModal() {
+      closeModal();
+      document.getElementById('claim-modal').classList.remove('hidden');
+      document.getElementById('claim-modal').classList.add('flex');
+    }
+
+    function closeClaimModal() {
+      document.getElementById('claim-modal').classList.add('hidden');
+      document.getElementById('claim-modal').classList.remove('flex');
+      document.getElementById('claim-preview').classList.add('hidden');
+    }
+
+    async function submitClaim(e) {
+      e.preventDefault();
+      const p = state.posts.find(x => x.id === state.currentItemId);
+      if (!p) return;
+
+      const proofFile = document.getElementById('claim-proof').files[0];
+      const proof = await fileToBase64(proofFile);
+      const message = document.getElementById('claim-message').value.trim();
+
+      const claim = {
+        id: uid(),
+        fromUserId: state.currentUser.id,
+        fromUsername: state.currentUser.username,
+        fromName: state.currentUser.name,
+        message,
+        proof,
+        createdAt: Date.now()
+      };
+
+      if (!p.claims) p.claims = [];
+      p.claims.push(claim);
+      p.status = 'claimed';
+
+      // Auto-send a message to owner
+      const msg = {
+        id: uid(),
+        from: state.currentUser.username,
+        to: p.username,
+        text: `[CLAIM] ${message}`,
+        itemId: p.id,
+        itemTitle: p.title,
+        proof,
+        timestamp: Date.now(),
+        read: false
+      };
+      state.messages.push(msg);
+
+      saveState();
+      toast('Claim submitted! Owner has been notified via Messages.');
+      closeClaimModal();
+      document.getElementById('claim-message').value = '';
+      document.getElementById('claim-proof').value = '';
+      showSection('messages');
+    }
+
+    // ===================== MESSAGING =====================
+    function startChat(withUsername, itemId) {
+      closeModal();
+      state.activeChat = { withUsername, itemId };
+      showSection('messages');
+      renderConversations();
+      openConversation(withUsername, itemId);
+    }
+
+    function getConversations() {
+      const me = state.currentUser.username;
+      const map = new Map();
+
+      state.messages.forEach(m => {
+        if (m.from === me || m.to === me) {
+          const other = m.from === me ? m.to : m.from;
+          const key = other + '|' + (m.itemId || '');
+          if (!map.has(key) || m.timestamp > map.get(key).lastTs) {
+            map.set(key, {
+              withUsername: other,
+              itemId: m.itemId,
+              lastMsg: m.text,
+              lastTs: m.timestamp,
+              unread: !m.read && m.to === me
+            });
+          }
+        }
+      });
+
+      return Array.from(map.values()).sort((a, b) => b.lastTs - a.lastTs);
+    }
+
+    function renderConversations() {
+      const list = document.getElementById('conversation-list');
+      const convos = getConversations();
+
+      if (convos.length === 0) {
+        list.innerHTML = `<p class="text-center text-white/40 text-sm py-8">No conversations yet.<br>Message someone from an item post.</p>`;
+        return;
+      }
+
+      list.innerHTML = convos.map(c => {
+        const user = state.users.find(u => u.username === c.withUsername);
+        const post = c.itemId ? state.posts.find(p => p.id === c.itemId) : null;
+        return `
+          <div onclick="openConversation('${c.withUsername}', '${c.itemId || ''}')" 
+               class="p-3 rounded-xl hover:bg-white/10 cursor-pointer transition ${state.activeChat && state.activeChat.withUsername === c.withUsername ? 'bg-white/10' : ''}">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-orange-500/30 flex items-center justify-center font-bold text-sm">
+                ${(user?.name || c.withUsername).charAt(0).toUpperCase()}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex justify-between">
+                  <p class="font-medium text-sm truncate">${user?.name || c.withUsername}</p>
+                  <span class="text-xs text-white/40">${timeAgo(c.lastTs)}</span>
+                </div>
+                <p class="text-xs text-white/50 truncate">${c.lastMsg}</p>
+                ${post ? `<p class="text-xs text-orange-400/80 mt-0.5 truncate">Re: ${post.title}</p>` : ''}
+              </div>
+              ${c.unread ? '<span class="w-2.5 h-2.5 bg-orange-500 rounded-full"></span>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openConversation(withUsername, itemId) {
+      state.activeChat = { withUsername, itemId: itemId || null };
+      const me = state.currentUser.username;
+      const user = state.users.find(u => u.username === withUsername);
+      const post = itemId ? state.posts.find(p => p.id === itemId) : null;
+
+      document.getElementById('chat-header').innerHTML = `
+        <div class="w-10 h-10 rounded-full bg-orange-500/30 flex items-center justify-center font-bold">
+          ${(user?.name || withUsername).charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <p class="font-semibold">${user?.name || withUsername}</p>
+          <p class="text-xs text-white/50">${post ? 'About: ' + post.title : '@' + withUsername}</p>
+        </div>
+      `;
+
+      document.getElementById('chat-input-area').classList.remove('hidden');
+
+      // Mark as read
+      state.messages.forEach(m => {
+        if (m.to === me && m.from === withUsername) m.read = true;
+      });
+      saveState();
+      updateMsgBadge();
+
+      const msgs = state.messages
+        .filter(m => (m.from === me && m.to === withUsername) || (m.from === withUsername && m.to === me))
+        .sort((a, b) => a.timestamp - b.timestamp);
+
+      const box = document.getElementById('chat-messages');
+      box.innerHTML = msgs.map(m => {
+        const isMe = m.from === me;
+        return `
+          <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+            <div class="max-w-[75%] ${isMe ? 'chat-bubble-me' : 'chat-bubble-them'} px-4 py-2.5 text-sm">
+              ${m.proof ? `<img src="${m.proof}" class="rounded-lg mb-2 max-h-40 object-cover" />` : ''}
+              <p>${m.text}</p>
+              <p class="text-[10px] opacity-60 mt-1 text-right">${new Date(m.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      box.scrollTop = box.scrollHeight;
+      renderConversations();
+    }
+
+    function sendMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text || !state.activeChat) return;
+
+      const msg = {
+        id: uid(),
+        from: state.currentUser.username,
+        to: state.activeChat.withUsername,
+        text,
+        itemId: state.activeChat.itemId,
+        timestamp: Date.now(),
+        read: false
+      };
+      state.messages.push(msg);
+      saveState();
+      input.value = '';
+      openConversation(state.activeChat.withUsername, state.activeChat.itemId);
+    }
+
+    function updateMsgBadge() {
+      const me = state.currentUser?.username;
+      if (!me) return;
+      const unread = state.messages.filter(m => m.to === me && !m.read).length;
+      const badge = document.getElementById('msg-badge');
+      if (unread > 0) {
+        badge.textContent = unread > 9 ? '9+' : unread;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    // ===================== INIT =====================
+    function init() {
+      loadState();
+      // Set default dates
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('lost-date').value = today;
+      document.getElementById('found-date').value = today;
+
+      // Demo data if empty (optional helper for testing)
+      if (state.users.length === 0) {
+        // leave empty so user creates their own
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
