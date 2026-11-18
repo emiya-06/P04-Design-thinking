@@ -11,15 +11,21 @@
       theme: {
         extend: {
           colors: {
-            lpu: {
-              blue: '#003366',
-              orange: '#FF6B00',
-              light: '#E8F1FF',
-              dark: '#0A1628'
+            brand: {
+              50:  '#FFF7ED',
+              100: '#FFEDD5',
+              500: '#F97316',
+              600: '#EA580C',
+              700: '#C2410C',
+              800: '#9A3412'
             }
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(0,0,0,0.06), 0 2px 8px -2px rgba(0,0,0,0.04)',
+            'card': '0 1px 3px rgba(0,0,0,0.04), 0 6px 16px -4px rgba(0,0,0,0.08)'
           }
         }
       }
@@ -32,63 +38,76 @@
     
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, #0A1628 0%, #0F2744 50%, #0A1628 100%);
+      background: #F8FAFC;
       min-height: 100vh;
+      color: #1E293B;
     }
     
     .glass {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 6px 16px -4px rgba(0,0,0,0.06);
     }
     
     .glass-strong {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 24px -4px rgba(0,0,0,0.08);
     }
     
     .card-hover {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .card-hover:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
-      border-color: rgba(255, 107, 0, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px -6px rgba(0,0,0,0.1), 0 4px 10px -3px rgba(0,0,0,0.05);
+      border-color: #C7D2FE;
     }
     
     .btn-primary {
-      background: linear-gradient(135deg, #FF6B00, #FF8C00);
-      transition: all 0.25s ease;
+      background: #EA580C;
+      color: white;
+      transition: all 0.2s ease;
     }
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px -5px rgba(255, 107, 0, 0.5);
+      background: #C2410C;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px -4px rgba(234, 88, 12, 0.35);
     }
     
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.25s ease;
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      color: #334155;
+      transition: all 0.2s ease;
     }
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: #E2E8F0;
+      color: #1E293B;
     }
     
     .input-field {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      color: #1E293B;
       transition: all 0.2s ease;
+    }
+    .input-field::placeholder {
+      color: #94A3B8;
     }
     .input-field:focus {
       outline: none;
-      border-color: #FF6B00;
-      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
-      background: rgba(255, 255, 255, 0.1);
+      border-color: #F97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+      background: #FFFFFF;
     }
     
     .toast {
       animation: slideIn 0.35s ease, fadeOut 0.4s ease 2.6s forwards;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      color: #1E293B;
+      box-shadow: 0 10px 30px -5px rgba(0,0,0,0.12);
     }
     @keyframes slideIn {
       from { transform: translateX(100%); opacity: 0; }
@@ -102,26 +121,28 @@
       animation: fadeIn 0.4s ease;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
     
-    .status-open { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-    .status-claimed { background: rgba(234, 179, 8, 0.2); color: #facc15; }
-    .status-returned { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .status-open { background: #ECFDF5; color: #059669; }
+    .status-claimed { background: #FFFBEB; color: #D97706; }
+    .status-returned { background: #EFF6FF; color: #2563EB; }
     
     .chat-bubble-me {
-      background: linear-gradient(135deg, #FF6B00, #FF8C00);
-      border-radius: 18px 18px 4px 18px;
+      background: #EA580C;
+      color: white;
+      border-radius: 16px 16px 4px 16px;
     }
     .chat-bubble-them {
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 18px 18px 18px 4px;
+      background: #F1F5F9;
+      color: #1E293B;
+      border-radius: 16px 16px 16px 4px;
     }
     
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
     
     .preview-img {
       max-height: 180px;
@@ -130,50 +151,61 @@
     }
     
     .nav-active {
-      color: #FF6B00 !important;
-      border-bottom: 2px solid #FF6B00;
+      color: #EA580C !important;
+      border-bottom: 2px solid #EA580C;
+      font-weight: 600;
+    }
+
+    /* Auth screen soft gradient */
+    .auth-bg {
+      background: linear-gradient(160deg, #F8FAFC 0%, #FFF7ED 45%, #F1F5F9 100%);
     }
   </style>
 </head>
-<body class="text-white antialiased">
+<body class="text-slate-800 antialiased">
   <!-- Toast Container -->
   <div id="toast-container" class="fixed top-5 right-5 z-[100] space-y-3"></div>
 
   <!-- ========== AUTH SCREEN ========== -->
-  <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4">
+  <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 auth-bg">
     <div class="w-full max-w-md fade-in">
       <!-- Logo -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-2xl mb-4">
-          <i class="fas fa-search-location text-3xl text-white"></i>
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-orange-600 shadow-lg shadow-orange-200 mb-4">
+          <i class="fas fa-search-location text-2xl text-white"></i>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight">LPU Lost & Found</h1>
-        <p class="text-white/60 mt-2 text-sm">Find it. Return it. Trust the campus.</p>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">LPU Lost & Found</h1>
+        <p class="text-slate-500 mt-1.5 text-sm">Find it. Return it. Trust the campus.</p>
       </div>
 
       <!-- Auth Card -->
-      <div class="glass-strong rounded-2xl p-8 shadow-2xl">
+      <div class="glass-strong rounded-2xl p-8">
         <!-- Tabs -->
-        <div class="flex mb-6 bg-white/5 rounded-xl p-1">
-          <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white">Login</button>
-          <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white">Register</button>
+        <div class="flex mb-6 bg-slate-100 rounded-xl p-1">
+          <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-600 text-white shadow-sm">Login</button>
+          <button id="tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-slate-500 hover:text-slate-800">Register</button>
         </div>
 
         <!-- Login Form -->
         <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Username</label>
-            <input type="text" id="login-username" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="your_username" />
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
+            <input type="text" id="login-username" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="your_username" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Password</label>
-            <input type="password" id="login-password" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="••••••••" />
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+            <div class="relative">
+              <input type="password" id="login-password" required class="input-field w-full px-4 py-3 pr-12 rounded-xl" placeholder="••••••••" />
+              <button type="button" onclick="togglePassword('login-password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-white mt-2">
+          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold mt-2">
             <i class="fas fa-sign-in-alt mr-2"></i>Login
           </button>
           <p class="text-center mt-3">
-            <button type="button" onclick="switchAuthTab('forgot')" class="text-sm text-orange-400 hover:text-orange-300 transition">
+            <button type="button" onclick="switchAuthTab('forgot')" class="text-sm text-orange-600 hover:text-orange-700 font-medium transition">
               Forgot Password?
             </button>
           </p>
@@ -181,92 +213,135 @@
 
         <!-- Register Form -->
         <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-          <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Full Name</label>
-            <input type="text" id="reg-name" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="Your full name" />
+          <!-- Step 1: Details -->
+          <div id="reg-step-details">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+                <input type="text" id="reg-name" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Your full name" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Username <span class="text-orange-500 text-xs">(must be unique)</span></label>
+                <input type="text" id="reg-username" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="choose_unique_username" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+                <div class="relative">
+                  <input type="password" id="reg-password" required minlength="4" class="input-field w-full px-4 py-3 pr-12 rounded-xl" placeholder="min 4 characters" />
+                  <button type="button" onclick="togglePassword('reg-password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Phone / Email</label>
+                <input type="text" id="reg-contact" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="for OTP verification & contact" />
+              </div>
+              <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold mt-2">
+                <i class="fas fa-paper-plane mr-2"></i>Send OTP
+              </button>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Username <span class="text-orange-400 text-xs">(must be unique)</span></label>
-            <input type="text" id="reg-username" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="choose_unique_username" />
+
+          <!-- Step 2: OTP Verification -->
+          <div id="reg-step-otp" class="hidden space-y-4">
+            <div class="text-center mb-2">
+              <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-50 mb-3">
+                <i class="fas fa-mobile-alt text-xl text-orange-600"></i>
+              </div>
+              <p class="text-sm text-slate-600 font-medium">Enter the 6-digit OTP</p>
+              <p class="text-xs text-slate-400 mt-1">Sent to <span id="otp-target" class="font-medium text-slate-600"></span></p>
+              <p class="text-xs text-orange-600 mt-2 font-medium">Demo OTP: <span class="tracking-widest">123456</span></p>
+            </div>
+            <div>
+              <input type="text" id="reg-otp" maxlength="6" inputmode="numeric" pattern="[0-9]*" class="input-field w-full px-4 py-3 rounded-xl text-center text-xl tracking-[0.4em] font-semibold" placeholder="• • • • • •" />
+            </div>
+            <button type="button" onclick="verifyOTP()" class="btn-primary w-full py-3.5 rounded-xl font-semibold">
+              <i class="fas fa-check-circle mr-2"></i>Verify & Create Account
+            </button>
+            <p class="text-center">
+              <button type="button" onclick="backToRegDetails()" class="text-sm text-slate-500 hover:text-slate-700">← Change details</button>
+            </p>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Password</label>
-            <input type="password" id="reg-password" required minlength="4" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="min 4 characters" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Contact (Phone / Email)</label>
-            <input type="text" id="reg-contact" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="for verification & contact" />
-          </div>
-          <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-bold text-white mt-2">
-            <i class="fas fa-user-plus mr-2"></i>Create Account
-          </button>
         </form>
 
         <!-- Forgot Password Form -->
         <form id="forgot-form" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
           <div class="text-center mb-2">
-            <i class="fas fa-key text-2xl text-orange-400 mb-2"></i>
-            <p class="text-sm text-white/70">Enter your username to reset password</p>
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-50 mb-3">
+              <i class="fas fa-key text-xl text-orange-600"></i>
+            </div>
+            <p class="text-sm text-slate-500">Enter your username to reset password</p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-white/80 mb-1.5">Username</label>
-            <input type="text" id="forgot-username" required class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="your_username" />
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
+            <input type="text" id="forgot-username" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="your_username" />
           </div>
           <div id="forgot-new-pass-section" class="hidden space-y-4">
             <div>
-              <label class="block text-sm font-medium text-white/80 mb-1.5">New Password</label>
-              <input type="password" id="forgot-new-password" minlength="4" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="enter new password" />
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">New Password</label>
+              <div class="relative">
+                <input type="password" id="forgot-new-password" minlength="4" class="input-field w-full px-4 py-3 pr-12 rounded-xl" placeholder="enter new password" />
+                <button type="button" onclick="togglePassword('forgot-new-password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-white/80 mb-1.5">Confirm New Password</label>
-              <input type="password" id="forgot-confirm-password" minlength="4" class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-white/40" placeholder="confirm new password" />
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">Confirm New Password</label>
+              <div class="relative">
+                <input type="password" id="forgot-confirm-password" minlength="4" class="input-field w-full px-4 py-3 pr-12 rounded-xl" placeholder="confirm new password" />
+                <button type="button" onclick="togglePassword('forgot-confirm-password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition p-1">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
             </div>
           </div>
-          <button type="submit" id="forgot-btn" class="btn-primary w-full py-3.5 rounded-xl font-bold text-white mt-2">
+          <button type="submit" id="forgot-btn" class="btn-primary w-full py-3.5 rounded-xl font-semibold mt-2">
             <i class="fas fa-search mr-2"></i>Find Account
           </button>
           <p class="text-center mt-3">
-            <button type="button" onclick="switchAuthTab('login')" class="text-sm text-white/50 hover:text-white transition">
+            <button type="button" onclick="switchAuthTab('login')" class="text-sm text-slate-500 hover:text-slate-700 transition">
               ← Back to Login
             </button>
           </p>
         </form>
       </div>
 
-      <p class="text-center text-white/40 text-xs mt-6">Prototype for INT335 · Design Thinking · P04</p>
+      <p class="text-center text-slate-400 text-xs mt-6">Prototype for INT335 · Design Thinking · P04</p>
     </div>
   </div>
 
   <!-- ========== MAIN APP ========== -->
-  <div id="app-screen" class="hidden min-h-screen flex flex-col">
+  <div id="app-screen" class="hidden min-h-screen flex flex-col bg-slate-50">
     <!-- Navbar -->
-    <nav class="glass sticky top-0 z-50 border-b border-white/10">
+    <nav class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-            <i class="fas fa-search-location text-white"></i>
+          <div class="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center">
+            <i class="fas fa-search-location text-white text-sm"></i>
           </div>
           <div>
-            <h1 class="font-bold text-lg leading-tight">LPU Lost & Found</h1>
-            <p class="text-xs text-white/50">Campus Connect</p>
+            <h1 class="font-bold text-base leading-tight text-slate-900">LPU Lost & Found</h1>
+            <p class="text-xs text-slate-400">Campus Connect</p>
           </div>
         </div>
 
         <div class="hidden md:flex items-center gap-1">
-          <button onclick="showSection('feed')" id="nav-feed" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Feed</button>
-          <button onclick="showSection('post-lost')" id="nav-post-lost" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Post Lost</button>
-          <button onclick="showSection('post-found')" id="nav-post-found" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">Post Found</button>
-          <button onclick="showSection('messages')" id="nav-messages" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition relative">
+          <button onclick="showSection('feed')" id="nav-feed" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition">Feed</button>
+          <button onclick="showSection('post-lost')" id="nav-post-lost" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition">Post Lost</button>
+          <button onclick="showSection('post-found')" id="nav-post-found" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition">Post Found</button>
+          <button onclick="showSection('messages')" id="nav-messages" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition relative">
             Messages
-            <span id="msg-badge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full text-xs flex items-center justify-center font-bold">0</span>
+            <span id="msg-badge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-orange-600 text-white rounded-full text-xs flex items-center justify-center font-bold">0</span>
           </button>
-          <button onclick="showSection('my-posts')" id="nav-my-posts" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-white/70 hover:text-white transition">My Posts</button>
+          <button onclick="showSection('my-posts')" id="nav-my-posts" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition">My Posts</button>
         </div>
 
         <div class="flex items-center gap-3">
           <div class="text-right hidden sm:block">
-            <p class="text-sm font-semibold" id="nav-username">User</p>
-            <p class="text-xs text-white/50" id="nav-fullname">Name</p>
+            <p class="text-sm font-semibold text-slate-800" id="nav-username">User</p>
+            <p class="text-xs text-slate-400" id="nav-fullname">Name</p>
           </div>
           <button onclick="handleLogout()" class="btn-secondary px-3 py-2 rounded-lg text-sm" title="Logout">
             <i class="fas fa-sign-out-alt"></i>
@@ -275,12 +350,12 @@
       </div>
 
       <!-- Mobile Nav -->
-      <div class="md:hidden flex overflow-x-auto gap-1 px-4 pb-3 border-t border-white/5 pt-2">
-        <button onclick="showSection('feed')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Feed</button>
-        <button onclick="showSection('post-lost')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Post Lost</button>
-        <button onclick="showSection('post-found')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Post Found</button>
-        <button onclick="showSection('messages')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">Messages</button>
-        <button onclick="showSection('my-posts')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white/70 whitespace-nowrap">My Posts</button>
+      <div class="md:hidden flex overflow-x-auto gap-1 px-4 pb-3 border-t border-slate-100 pt-2">
+        <button onclick="showSection('feed')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 whitespace-nowrap">Feed</button>
+        <button onclick="showSection('post-lost')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 whitespace-nowrap">Post Lost</button>
+        <button onclick="showSection('post-found')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 whitespace-nowrap">Post Found</button>
+        <button onclick="showSection('messages')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 whitespace-nowrap">Messages</button>
+        <button onclick="showSection('my-posts')" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 whitespace-nowrap">My Posts</button>
       </div>
     </nav>
 
@@ -291,8 +366,8 @@
       <section id="section-feed" class="fade-in">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="text-2xl font-bold">Campus Lost & Found</h2>
-            <p class="text-white/50 text-sm">Browse recent posts · Help someone recover their belongings</p>
+            <h2 class="text-2xl font-bold text-slate-900">Campus Lost & Found</h2>
+            <p class="text-slate-500 text-sm">Browse recent posts · Help someone recover their belongings</p>
           </div>
           <div class="flex gap-2">
             <select id="filter-type" onchange="renderFeed()" class="input-field px-3 py-2 rounded-lg text-sm">
@@ -317,8 +392,8 @@
           <!-- Cards injected by JS -->
         </div>
         <div id="feed-empty" class="hidden text-center py-16">
-          <i class="fas fa-inbox text-5xl text-white/20 mb-4"></i>
-          <p class="text-white/50">No posts yet. Be the first to post!</p>
+          <i class="fas fa-inbox text-5xl text-slate-300 mb-4"></i>
+          <p class="text-slate-500">No posts yet. Be the first to post!</p>
         </div>
       </section>
 
@@ -326,7 +401,7 @@
       <section id="section-post-lost" class="hidden fade-in">
         <div class="max-w-2xl mx-auto">
           <h2 class="text-2xl font-bold mb-1">Report a Lost Item</h2>
-          <p class="text-white/50 text-sm mb-6">Provide as many details as possible so finders can match it.</p>
+          <p class="text-slate-500 text-sm mb-6">Provide as many details as possible so finders can match it.</p>
 
           <form onsubmit="submitLostItem(event)" class="glass-strong rounded-2xl p-6 space-y-5">
             <div>
@@ -390,9 +465,9 @@
               <div id="lost-preview" class="mt-3 hidden"></div>
             </div>
 
-            <div class="bg-orange-500/10 border border-orange-500/30 rounded-xl p-4">
-              <p class="text-sm font-semibold text-orange-300 mb-2"><i class="fas fa-shield-alt mr-2"></i>Ownership Proof (Strongly Recommended)</p>
-              <p class="text-xs text-white/60 mb-3">Upload a photo of the item before losing it, a bill, or any proof. This helps us return it to the correct owner.</p>
+            <div class="bg-orange-50 border border-orange-100 rounded-xl p-4">
+              <p class="text-sm font-semibold text-orange-700 mb-2"><i class="fas fa-shield-alt mr-2"></i>Ownership Proof (Strongly Recommended)</p>
+              <p class="text-xs text-slate-500 mb-3">Upload a photo of the item before losing it, a bill, or any proof. This helps us return it to the correct owner.</p>
               <input type="file" id="lost-proof" accept="image/*" class="input-field w-full px-4 py-3 rounded-xl text-sm" onchange="previewImage(this, 'lost-proof-preview')" />
               <div id="lost-proof-preview" class="mt-3 hidden"></div>
             </div>
@@ -413,7 +488,7 @@
       <section id="section-post-found" class="hidden fade-in">
         <div class="max-w-2xl mx-auto">
           <h2 class="text-2xl font-bold mb-1">Report a Found Item</h2>
-          <p class="text-white/50 text-sm mb-6">Thank you for being a good campus citizen. Post what you found so the owner can claim it.</p>
+          <p class="text-slate-500 text-sm mb-6">Thank you for being a good campus citizen. Post what you found so the owner can claim it.</p>
 
           <form onsubmit="submitFoundItem(event)" class="glass-strong rounded-2xl p-6 space-y-5">
             <div>
@@ -495,7 +570,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 h-[calc(100vh-220px)] min-h-[400px]">
           <!-- Conversation List -->
           <div class="glass rounded-2xl overflow-hidden flex flex-col">
-            <div class="p-4 border-b border-white/10">
+            <div class="p-4 border-b border-slate-200">
               <h3 class="font-semibold">Conversations</h3>
             </div>
             <div id="conversation-list" class="flex-1 overflow-y-auto p-2 space-y-1">
@@ -505,13 +580,13 @@
 
           <!-- Chat Area -->
           <div class="lg:col-span-2 glass rounded-2xl overflow-hidden flex flex-col">
-            <div id="chat-header" class="p-4 border-b border-white/10 flex items-center gap-3">
-              <p class="text-white/50 text-sm">Select a conversation</p>
+            <div id="chat-header" class="p-4 border-b border-slate-200 flex items-center gap-3">
+              <p class="text-slate-500 text-sm">Select a conversation</p>
             </div>
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
               <!-- Messages -->
             </div>
-            <div id="chat-input-area" class="p-4 border-t border-white/10 hidden">
+            <div id="chat-input-area" class="p-4 border-t border-slate-200 hidden">
               <form onsubmit="sendMessage(event)" class="flex gap-2">
                 <input type="text" id="chat-input" class="input-field flex-1 px-4 py-3 rounded-xl" placeholder="Type your message..." autocomplete="off" />
                 <button type="submit" class="btn-primary px-5 rounded-xl">
@@ -530,8 +605,8 @@
           <!-- Injected -->
         </div>
         <div id="my-posts-empty" class="hidden text-center py-16">
-          <i class="fas fa-folder-open text-5xl text-white/20 mb-4"></i>
-          <p class="text-white/50">You haven't posted anything yet.</p>
+          <i class="fas fa-folder-open text-5xl text-slate-300 mb-4"></i>
+          <p class="text-slate-500">You haven't posted anything yet.</p>
         </div>
       </section>
 
@@ -544,45 +619,45 @@
                 <span id="modal-type-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-2"></span>
                 <h3 id="modal-title" class="text-xl font-bold"></h3>
               </div>
-              <button onclick="closeModal()" class="text-white/50 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+              <button onclick="closeModal()" class="text-slate-500 hover:text-slate-800 text-xl"><i class="fas fa-times"></i></button>
             </div>
 
             <div id="modal-image-container" class="mb-4 rounded-xl overflow-hidden bg-black/30"></div>
 
             <div class="grid grid-cols-2 gap-3 text-sm mb-4">
-              <div class="bg-white/5 rounded-lg p-3">
-                <p class="text-white/50 text-xs">Category</p>
+              <div class="bg-slate-50 rounded-lg p-3">
+                <p class="text-slate-500 text-xs">Category</p>
                 <p id="modal-category" class="font-medium"></p>
               </div>
-              <div class="bg-white/5 rounded-lg p-3">
-                <p class="text-white/50 text-xs">Location</p>
+              <div class="bg-slate-50 rounded-lg p-3">
+                <p class="text-slate-500 text-xs">Location</p>
                 <p id="modal-location" class="font-medium"></p>
               </div>
-              <div class="bg-white/5 rounded-lg p-3">
-                <p class="text-white/50 text-xs">Date</p>
+              <div class="bg-slate-50 rounded-lg p-3">
+                <p class="text-slate-500 text-xs">Date</p>
                 <p id="modal-date" class="font-medium"></p>
               </div>
-              <div class="bg-white/5 rounded-lg p-3">
-                <p class="text-white/50 text-xs">Status</p>
+              <div class="bg-slate-50 rounded-lg p-3">
+                <p class="text-slate-500 text-xs">Status</p>
                 <p id="modal-status" class="font-medium"></p>
               </div>
             </div>
 
             <div class="mb-4">
-              <p class="text-white/50 text-xs mb-1">Description</p>
+              <p class="text-slate-500 text-xs mb-1">Description</p>
               <p id="modal-desc" class="text-sm leading-relaxed"></p>
             </div>
 
             <div id="modal-proof-section" class="mb-4 hidden">
-              <p class="text-white/50 text-xs mb-2">Ownership Proof uploaded by owner</p>
+              <p class="text-slate-500 text-xs mb-2">Ownership Proof uploaded by owner</p>
               <div id="modal-proof-img"></div>
             </div>
 
             <div class="flex items-center gap-3 mb-5 text-sm">
-              <div class="w-9 h-9 rounded-full bg-orange-500/30 flex items-center justify-center font-bold" id="modal-poster-initial"></div>
+              <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm" id="modal-poster-initial"></div>
               <div>
                 <p class="font-medium" id="modal-poster"></p>
-                <p class="text-white/50 text-xs" id="modal-contact"></p>
+                <p class="text-slate-500 text-xs" id="modal-contact"></p>
               </div>
             </div>
 
@@ -597,7 +672,7 @@
       <div id="claim-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
         <div class="glass-strong rounded-2xl max-w-md w-full fade-in p-6">
           <h3 class="text-xl font-bold mb-1">Claim this Item</h3>
-          <p class="text-white/50 text-sm mb-5">To prove ownership, please upload proof (photo of item before loss / bill / unique mark).</p>
+          <p class="text-slate-500 text-sm mb-5">To prove ownership, please upload proof (photo of item before loss / bill / unique mark).</p>
           
           <form onsubmit="submitClaim(event)" class="space-y-4">
             <div>
@@ -693,11 +768,25 @@
       const el = document.createElement('div');
       el.className = `toast glass-strong px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 max-w-sm ${type === 'error' ? 'border-red-500/40' : 'border-green-500/40'}`;
       el.innerHTML = `
-        <i class="fas ${type === 'error' ? 'fa-exclamation-circle text-red-400' : 'fa-check-circle text-green-400'}"></i>
+        <i class="fas ${type === 'error' ? 'fa-exclamation-circle text-red-500' : 'fa-check-circle text-emerald-500'}"></i>
         <span class="text-sm font-medium">${msg}</span>
       `;
       container.appendChild(el);
       setTimeout(() => el.remove(), 3000);
+    }
+
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
     }
 
     function uid() {
@@ -756,13 +845,19 @@
         document.getElementById('forgot-new-password').value = '';
         document.getElementById('forgot-confirm-password').value = '';
       }
+      // Reset register OTP step
+      if (tab === 'register') {
+        document.getElementById('reg-step-otp').classList.add('hidden');
+        document.getElementById('reg-step-details').classList.remove('hidden');
+        pendingReg = null;
+      }
 
       document.getElementById('tab-login').className = tab === 'login'
-        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white'
-        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white';
+        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-600 text-white shadow-sm'
+        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-slate-500 hover:text-slate-800';
       document.getElementById('tab-register').className = tab === 'register'
-        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-500 text-white'
-        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-white/70 hover:text-white';
+        ? 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all bg-orange-600 text-white shadow-sm'
+        : 'flex-1 py-2.5 rounded-lg font-semibold text-sm transition-all text-slate-500 hover:text-slate-800';
     }
 
     let forgotUser = null; // temporary holder while resetting
@@ -815,24 +910,78 @@
       }
     }
 
+    let pendingReg = null; // holds form data until OTP is verified
+
     function handleRegister(e) {
       e.preventDefault();
+      // Only process if we are on the details step
+      if (!document.getElementById('reg-step-otp').classList.contains('hidden')) return;
+
       const name = document.getElementById('reg-name').value.trim();
       const username = document.getElementById('reg-username').value.trim().toLowerCase();
       const password = document.getElementById('reg-password').value;
       const contact = document.getElementById('reg-contact').value.trim();
 
+      if (!name || !username || !password || !contact) {
+        toast('Please fill all fields', 'error');
+        return;
+      }
+      if (password.length < 4) {
+        toast('Password must be at least 4 characters', 'error');
+        return;
+      }
       if (state.users.find(u => u.username === username)) {
         toast('Username already taken. Choose another.', 'error');
         return;
       }
 
-      const user = { id: uid(), name, username, password, contact, createdAt: Date.now() };
+      pendingReg = { name, username, password, contact };
+      document.getElementById('otp-target').textContent = contact;
+      document.getElementById('reg-step-details').classList.add('hidden');
+      document.getElementById('reg-step-otp').classList.remove('hidden');
+      document.getElementById('reg-otp').value = '';
+      document.getElementById('reg-otp').focus();
+      toast('OTP sent! Use demo code 123456');
+    }
+
+    function verifyOTP() {
+      const otp = document.getElementById('reg-otp').value.trim();
+      if (otp !== '123456') {
+        toast('Invalid OTP. Use 123456 for demo.', 'error');
+        return;
+      }
+      if (!pendingReg) {
+        toast('Session expired. Please start again.', 'error');
+        backToRegDetails();
+        return;
+      }
+
+      const user = {
+        id: uid(),
+        name: pendingReg.name,
+        username: pendingReg.username,
+        password: pendingReg.password,
+        contact: pendingReg.contact,
+        verified: true,
+        createdAt: Date.now()
+      };
       state.users.push(user);
       saveState();
-      toast('Account created! Please login.');
+      pendingReg = null;
+
+      toast('Account verified & created! Please login.');
+      // Reset form UI
+      document.getElementById('reg-step-otp').classList.add('hidden');
+      document.getElementById('reg-step-details').classList.remove('hidden');
+      document.getElementById('register-form').reset();
       switchAuthTab('login');
-      document.getElementById('login-username').value = username;
+      document.getElementById('login-username').value = user.username;
+    }
+
+    function backToRegDetails() {
+      document.getElementById('reg-step-otp').classList.add('hidden');
+      document.getElementById('reg-step-details').classList.remove('hidden');
+      pendingReg = null;
     }
 
     function handleLogin(e) {
@@ -870,7 +1019,7 @@
       ['feed', 'post-lost', 'post-found', 'messages', 'my-posts'].forEach(s => {
         document.getElementById('section-' + s).classList.add('hidden');
         const btn = document.getElementById('nav-' + s);
-        if (btn) btn.classList.remove('nav-active', 'text-orange-400');
+        if (btn) btn.classList.remove('nav-active', 'text-orange-600');
       });
       document.getElementById('section-' + name).classList.remove('hidden');
       const activeBtn = document.getElementById('nav-' + name);
@@ -903,20 +1052,20 @@
       container.innerHTML = posts.map(p => `
         <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer" onclick="openItemModal('${p.id}')">
           ${p.image ? `<img src="${p.image}" class="w-full h-44 object-cover" />` : `
-            <div class="w-full h-44 bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center">
-              <i class="fas fa-image text-4xl text-white/20"></i>
+            <div class="w-full h-44 bg-slate-100 flex items-center justify-center">
+              <i class="fas fa-image text-4xl text-slate-300"></i>
             </div>
           `}
           <div class="p-4">
             <div class="flex items-center justify-between mb-2">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold ${p.type === 'lost' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">
                 ${p.type === 'lost' ? 'LOST' : 'FOUND'}
               </span>
               <span class="status-${p.status} px-2.5 py-0.5 rounded-full text-xs font-medium capitalize">${p.status}</span>
             </div>
-            <h3 class="font-semibold text-lg leading-tight mb-1 line-clamp-1">${p.title}</h3>
-            <p class="text-white/50 text-sm mb-3 line-clamp-2">${p.description}</p>
-            <div class="flex items-center justify-between text-xs text-white/40">
+            <h3 class="font-semibold text-slate-900 text-lg leading-tight mb-1 line-clamp-1">${p.title}</h3>
+            <p class="text-slate-500 text-sm mb-3 line-clamp-2">${p.description}</p>
+            <div class="flex items-center justify-between text-xs text-slate-400">
               <span><i class="fas fa-map-marker-alt mr-1"></i>${p.location}</span>
               <span>${timeAgo(p.createdAt)}</span>
             </div>
@@ -940,15 +1089,15 @@
       container.innerHTML = posts.map(p => `
         <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer" onclick="openItemModal('${p.id}')">
           ${p.image ? `<img src="${p.image}" class="w-full h-40 object-cover" />` : `
-            <div class="w-full h-40 bg-white/5 flex items-center justify-center"><i class="fas fa-image text-3xl text-white/20"></i></div>
+            <div class="w-full h-40 bg-slate-50 flex items-center justify-center"><i class="fas fa-image text-3xl text-slate-300"></i></div>
           `}
           <div class="p-4">
             <div class="flex justify-between mb-2">
-              <span class="px-2 py-0.5 rounded-full text-xs font-bold ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">${p.type.toUpperCase()}</span>
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${p.type === 'lost' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">${p.type.toUpperCase()}</span>
               <span class="status-${p.status} px-2 py-0.5 rounded-full text-xs capitalize">${p.status}</span>
             </div>
-            <h3 class="font-semibold mb-1">${p.title}</h3>
-            <p class="text-xs text-white/40">${formatDate(p.date)} · ${p.location}</p>
+            <h3 class="font-semibold text-slate-900 mb-1">${p.title}</h3>
+            <p class="text-xs text-slate-400">${formatDate(p.date)} · ${p.location}</p>
           </div>
         </div>
       `).join('');
@@ -1030,7 +1179,7 @@
       state.currentItemId = id;
 
       document.getElementById('modal-type-badge').textContent = p.type === 'lost' ? 'LOST ITEM' : 'FOUND ITEM';
-      document.getElementById('modal-type-badge').className = `inline-block px-3 py-1 rounded-full text-xs font-bold mb-2 ${p.type === 'lost' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`;
+      document.getElementById('modal-type-badge').className = `inline-block px-3 py-1 rounded-full text-xs font-semibold mb-2 ${p.type === 'lost' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`;
       document.getElementById('modal-title').textContent = p.title;
       document.getElementById('modal-category').textContent = p.category;
       document.getElementById('modal-location').textContent = p.location;
@@ -1042,7 +1191,7 @@
       document.getElementById('modal-poster-initial').textContent = p.name.charAt(0).toUpperCase();
 
       const imgC = document.getElementById('modal-image-container');
-      imgC.innerHTML = p.image ? `<img src="${p.image}" class="w-full max-h-72 object-contain" />` : '<div class="h-32 flex items-center justify-center text-white/30"><i class="fas fa-image text-4xl"></i></div>';
+      imgC.innerHTML = p.image ? `<img src="${p.image}" class="w-full max-h-72 object-contain" />` : '<div class="h-32 flex items-center justify-center text-slate-400"><i class="fas fa-image text-4xl"></i></div>';
 
       const proofSec = document.getElementById('modal-proof-section');
       if (p.proof) {
@@ -1067,7 +1216,7 @@
         }
         // Show claims if any
         if (p.claims && p.claims.length > 0) {
-          actions.innerHTML += `<p class="w-full text-sm text-white/60 mt-2">Claims received: ${p.claims.length} (check Messages)</p>`;
+          actions.innerHTML += `<p class="w-full text-sm text-slate-500 mt-2">Claims received: ${p.claims.length} (check Messages)</p>`;
         }
       } else {
         // Other user
@@ -1081,7 +1230,7 @@
             </button>
           `;
         } else {
-          actions.innerHTML = `<p class="text-white/50 text-sm">This item is already ${p.status}.</p>`;
+          actions.innerHTML = `<p class="text-slate-500 text-sm">This item is already ${p.status}.</p>`;
         }
       }
 
@@ -1201,7 +1350,7 @@
       const convos = getConversations();
 
       if (convos.length === 0) {
-        list.innerHTML = `<p class="text-center text-white/40 text-sm py-8">No conversations yet.<br>Message someone from an item post.</p>`;
+        list.innerHTML = `<p class="text-center text-slate-400 text-sm py-8">No conversations yet.<br>Message someone from an item post.</p>`;
         return;
       }
 
@@ -1210,20 +1359,20 @@
         const post = c.itemId ? state.posts.find(p => p.id === c.itemId) : null;
         return `
           <div onclick="openConversation('${c.withUsername}', '${c.itemId || ''}')" 
-               class="p-3 rounded-xl hover:bg-white/10 cursor-pointer transition ${state.activeChat && state.activeChat.withUsername === c.withUsername ? 'bg-white/10' : ''}">
+               class="p-3 rounded-xl hover:bg-slate-100 cursor-pointer transition ${state.activeChat && state.activeChat.withUsername === c.withUsername ? 'bg-slate-100' : ''}">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-orange-500/30 flex items-center justify-center font-bold text-sm">
+              <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm">
                 ${(user?.name || c.withUsername).charAt(0).toUpperCase()}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex justify-between">
                   <p class="font-medium text-sm truncate">${user?.name || c.withUsername}</p>
-                  <span class="text-xs text-white/40">${timeAgo(c.lastTs)}</span>
+                  <span class="text-xs text-slate-400">${timeAgo(c.lastTs)}</span>
                 </div>
-                <p class="text-xs text-white/50 truncate">${c.lastMsg}</p>
-                ${post ? `<p class="text-xs text-orange-400/80 mt-0.5 truncate">Re: ${post.title}</p>` : ''}
+                <p class="text-xs text-slate-500 truncate">${c.lastMsg}</p>
+                ${post ? `<p class="text-xs text-orange-600/80 mt-0.5 truncate">Re: ${post.title}</p>` : ''}
               </div>
-              ${c.unread ? '<span class="w-2.5 h-2.5 bg-orange-500 rounded-full"></span>' : ''}
+              ${c.unread ? '<span class="w-2.5 h-2.5 bg-orange-600 rounded-full"></span>' : ''}
             </div>
           </div>
         `;
@@ -1237,12 +1386,12 @@
       const post = itemId ? state.posts.find(p => p.id === itemId) : null;
 
       document.getElementById('chat-header').innerHTML = `
-        <div class="w-10 h-10 rounded-full bg-orange-500/30 flex items-center justify-center font-bold">
+        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
           ${(user?.name || withUsername).charAt(0).toUpperCase()}
         </div>
         <div>
           <p class="font-semibold">${user?.name || withUsername}</p>
-          <p class="text-xs text-white/50">${post ? 'About: ' + post.title : '@' + withUsername}</p>
+          <p class="text-xs text-slate-500">${post ? 'About: ' + post.title : '@' + withUsername}</p>
         </div>
       `;
 
